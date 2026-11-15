@@ -1,0 +1,341 @@
+/* ============================================================
+   TRAF NIEČO — pixel night scene
+   ============================================================ */
+
+@font-face {
+    font-family: "Press Start 2P";
+    src: url("fonts/PressStart2P-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    --night: #211b40;
+    --night-deep: #151029;
+    --panel: #241c3e;
+    --cream: #f2ecdb;
+    --cream-dim: rgba(242, 236, 219, 0.55);
+    --pink: #f2415f;
+    --pink-deep: #7e1e3a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    background: var(--night-deep);
+    color: var(--cream);
+    font-family: "Press Start 2P", "Courier New", monospace;
+
+    overflow-x: hidden;
+}
+
+/* CRT scanlines + vignette nad scénou */
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 30;
+
+    background:
+        radial-gradient(ellipse at center, transparent 55%, rgba(10, 6, 24, 0.42));
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 31;
+
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(10, 6, 24, 0.09) 0 1px,
+        transparent 1px 4px
+    );
+}
+
+/* MAIN */
+
+#init {
+    position: relative;
+    flex: 1;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 100vh;
+    padding: 2rem 1.5rem;
+
+    overflow: hidden;
+}
+
+/* SCÉNA (pixel SVG pozadie) */
+
+.scene {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.scene-svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* HERO */
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    text-align: center;
+
+    animation: appear 0.7s ease-out both;
+}
+
+/* KLADIVO */
+
+.hammer {
+    width: clamp(100px, 12vw, 142px);
+    margin-bottom: 2.2rem;
+
+    animation: float 3.2s ease-in-out infinite alternate;
+}
+
+.hammer-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* TITULOK */
+
+/* Č / Ť skladané z base písmena + mäkčeň (PS2P má vlastné glyfy nečitateľné) */
+
+.ccaron,
+.tcaron {
+    position: relative;
+}
+
+.ccaron::before,
+.tcaron::before {
+    content: "ˇ";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -0.34em;
+
+    text-align: center;
+    line-height: 1;
+}
+
+#init h1.title {
+    margin: 0 0 2.6rem;
+
+    font-weight: normal;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+#init h1 .line-1 {
+    display: block;
+
+    font-size: clamp(2.3rem, 6.5vw, 4.4rem);
+    letter-spacing: 0.08em;
+
+    color: var(--cream);
+    text-shadow: 0.14em 0.14em 0 rgba(21, 16, 41, 0.85);
+}
+
+#init h1 .line-2 {
+    display: block;
+
+    margin-top: 0.42em;
+
+    font-size: clamp(2.7rem, 7.8vw, 5.2rem);
+    letter-spacing: 0.05em;
+
+    color: var(--pink);
+    text-shadow: 0.14em 0.14em 0 rgba(21, 16, 41, 0.9);
+}
+
+/* ŠTART TLAČIDLO */
+
+.play-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.1em;
+
+    padding: 1.4em 2.6em;
+
+    background: var(--panel);
+    color: var(--cream);
+
+    font-family: inherit;
+    font-size: clamp(0.78rem, 1.6vw, 1.02rem);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-decoration: none;
+
+    border: 3px solid var(--cream);
+
+    clip-path: polygon(
+        0 8px, 8px 8px, 8px 0,
+        calc(100% - 8px) 0, calc(100% - 8px) 8px, 100% 8px,
+        100% calc(100% - 8px), calc(100% - 8px) calc(100% - 8px), calc(100% - 8px) 100%,
+        8px 100%, 8px calc(100% - 8px), 0 calc(100% - 8px)
+    );
+
+    box-shadow:
+        inset 0 0 0 3px var(--panel),
+        inset 0 0 0 5px rgba(242, 236, 219, 0.5);
+
+    transition:
+        transform 0.12s ease,
+        background 0.12s ease;
+}
+
+.play-btn .btn-tri {
+    width: 0.9em;
+    height: auto;
+
+    color: var(--pink);
+}
+
+.play-btn:hover {
+    transform: translateY(-3px);
+
+    background: #2e2450;
+}
+
+.play-btn:hover .btn-tri {
+    color: #ff6a83;
+}
+
+.play-btn:active {
+    transform: translateY(2px);
+}
+
+.play-btn:focus-visible {
+    outline: 3px solid var(--cream);
+    outline-offset: 6px;
+}
+
+/* KEY HINT */
+
+.key-hint {
+    margin: 2.4rem 0 0;
+
+    color: var(--cream-dim);
+
+    font-size: 0.58rem;
+    letter-spacing: 2px;
+}
+
+.key-hint span {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 4px 6px;
+
+    border: 2px solid rgba(242, 236, 219, 0.35);
+
+    color: var(--cream);
+}
+
+/* ANIMÁCIE */
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes float {
+    from {
+        transform: translateY(0) rotate(-2deg);
+    }
+
+    to {
+        transform: translateY(-12px) rotate(2deg);
+    }
+}
+
+@keyframes twinkle {
+    0%, 100% {
+        opacity: 0.15;
+    }
+
+    50% {
+        opacity: 0.95;
+    }
+}
+
+@keyframes drift {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(36px);
+    }
+}
+
+.scene-svg .tw {
+    animation: twinkle 3.4s ease-in-out infinite;
+}
+
+.scene-svg .cloud {
+    animation: drift 44s ease-in-out infinite alternate;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+    #init {
+        padding: 2rem 1rem;
+    }
+
+    .hammer {
+        margin-bottom: 1.6rem;
+    }
+
+    #init h1.title {
+        margin-bottom: 2rem;
+    }
+
+    .key-hint {
+        font-size: 0.5rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}

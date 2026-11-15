@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="sk">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Traf Niečo — Skóre</title>
+
+    <link rel="stylesheet" href="header.css">
+    <link rel="stylesheet" href="score.css">
+</head>
+
+<body>
+
+    <header id="header"></header>
+
+    <main id="score-page">
+
+        <section class="panel">
+            <h1 class="page-title">Najlep<span class="cr">s</span>ie <span>skóre.</span></h1>
+
+            <div class="best-box">
+                <span class="hud-label">Rekord</span>
+                <span class="best-val" id="best-big">0</span>
+            </div>
+
+            <p class="empty hidden" id="empty-note">
+                <span class="cr">Z</span>iadne výsledky. Zahraj si kolo!
+            </p>
+
+            <table class="score-table" id="score-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Skóre</th>
+                        <th>Trafy</th>
+                        <th>Presnos<span class="cr">t</span></th>
+                        <th>Reakcia</th>
+                        <th>Dátum</th>
+                    </tr>
+                </thead>
+                <tbody id="score-body"></tbody>
+            </table>
+
+            <div class="row">
+                <a class="ghost-btn" href="game.html">Hra<span class="cr">t</span></a>
+                <a class="ghost-btn" href="index.html">Domov</a>
+                <button class="ghost-btn danger" id="btn-clear" type="button">Vymaza<span class="cr">t</span></button>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="header.js"></script>
+    <script src="score.js"></script>
+
+</body>
+</html>

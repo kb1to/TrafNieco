@@ -1,0 +1,318 @@
+/* ============================================================
+   TRAF NIEČO — score page
+   ============================================================ */
+
+@font-face {
+    font-family: "Press Start 2P";
+    src: url("fonts/PressStart2P-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    --night: #211b40;
+    --night-deep: #151029;
+    --panel: #241c3e;
+    --cream: #f2ecdb;
+    --cream-dim: rgba(242, 236, 219, 0.55);
+    --pink: #f2415f;
+    --pink-deep: #7e1e3a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    min-height: 100dvh;
+
+    display: flex;
+    flex-direction: column;
+
+    background:
+        radial-gradient(ellipse at 50% 118%, rgba(242, 65, 95, 0.16), transparent 55%),
+        linear-gradient(#1e1938, #302551 55%, #473461);
+
+    color: var(--cream);
+    font-family: "Press Start 2P", "Courier New", monospace;
+
+    overflow-x: hidden;
+}
+
+/* CRT scanlines + vignette */
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 30;
+
+    background:
+        radial-gradient(ellipse at center, transparent 55%, rgba(10, 6, 24, 0.42));
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 31;
+
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(10, 6, 24, 0.09) 0 1px,
+        transparent 1px 4px
+    );
+}
+
+#score-page {
+    position: relative;
+    flex: 1;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    padding: 108px 16px 48px;
+}
+
+.panel {
+    width: min(760px, 100%);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+
+    padding: clamp(1.4rem, 4vw, 2.6rem);
+
+    background: rgba(36, 28, 62, 0.9);
+    border: 3px solid var(--cream);
+
+    box-shadow:
+        inset 0 0 0 2px var(--panel),
+        inset 0 0 0 4px rgba(242, 236, 219, 0.35),
+        0 20px 60px rgba(0, 0, 0, 0.35);
+
+    animation: appear 0.6s ease-out both;
+}
+
+.page-title {
+    margin: 0;
+
+    font-size: clamp(1rem, 3.2vw, 1.5rem);
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    line-height: 1.5;
+
+    color: var(--cream);
+    text-shadow: 0.14em 0.14em 0 rgba(21, 16, 41, 0.9);
+    text-align: center;
+}
+
+.page-title span {
+    color: var(--pink);
+}
+
+.best-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+
+    padding: 14px 30px;
+
+    background: rgba(21, 16, 41, 0.85);
+    border: 3px solid var(--pink);
+}
+
+.hud-label {
+    font-size: 0.5rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--cream-dim);
+}
+
+.best-val {
+    font-size: clamp(1.3rem, 5vw, 2rem);
+    color: var(--pink);
+    text-shadow: 0.1em 0.1em 0 rgba(21, 16, 41, 0.9);
+}
+
+.empty {
+    margin: 0;
+
+    font-size: 0.6rem;
+    line-height: 1.9;
+    letter-spacing: 1px;
+    text-align: center;
+
+    color: var(--cream-dim);
+}
+
+.empty.hidden {
+    display: none;
+}
+
+.hidden {
+    display: none;
+}
+
+/* TABUĽKA */
+
+.score-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    font-size: 0.55rem;
+    letter-spacing: 0.5px;
+}
+
+.score-table th,
+.score-table td {
+    padding: 9px 8px;
+
+    text-align: center;
+    vertical-align: middle;
+}
+
+.score-table th {
+    font-size: 0.5rem;
+    text-transform: uppercase;
+
+    color: var(--cream-dim);
+
+    border-bottom: 3px solid rgba(242, 236, 219, 0.4);
+}
+
+.score-table tbody tr {
+    border-bottom: 2px solid rgba(242, 236, 219, 0.14);
+}
+
+.score-table td {
+    color: var(--cream);
+}
+
+.score-table td.score {
+    color: var(--pink);
+}
+
+.score-table td.date {
+    font-size: 0.45rem;
+    color: var(--cream-dim);
+}
+
+.score-table tr.best-row td {
+    color: var(--pink);
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+}
+
+/* Č/Š/Ť skladané z base písmena + mäkčeň */
+
+.cr {
+    position: relative;
+}
+
+.cr::before {
+    content: "ˇ";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -0.34em;
+
+    text-align: center;
+    line-height: 1;
+}
+
+/* TLAČIDLÁ */
+
+.ghost-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 1.2em 1.8em;
+
+    background: transparent;
+    color: var(--cream);
+
+    font-family: inherit;
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+
+    border: 2px solid rgba(242, 236, 219, 0.55);
+
+    cursor: pointer;
+
+    transition: color 0.12s ease, border-color 0.12s ease;
+}
+
+.ghost-btn:hover {
+    color: var(--pink);
+    border-color: var(--pink);
+}
+
+.ghost-btn.danger {
+    color: #ff9daa;
+    border-color: rgba(242, 65, 95, 0.6);
+}
+
+.ghost-btn.danger.armed {
+    background: var(--pink-deep);
+    color: var(--cream);
+    border-color: var(--pink);
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 640px) {
+    #score-page {
+        padding: 96px 10px 32px;
+    }
+
+    .score-table {
+        font-size: 0.45rem;
+    }
+
+    .score-table th,
+    .score-table td {
+        padding: 7px 4px;
+    }
+
+    .score-table td.date {
+        font-size: 0.38rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}
